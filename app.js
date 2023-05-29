@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const inputAuthor = document.querySelector('.author');
   const addButton = document.querySelector('.add');
 
-  //My Books constructor, for the user input
+  // My Books constructor, for the user input
   class Book {
     constructor(title, author) {
       this.title = title;
