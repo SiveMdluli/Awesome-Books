@@ -118,38 +118,3 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Creating a new book instance and appending it to the bookDisplay div
-function display() {
-  bookDisplay.innerHTML = ''; // Clearing the previous instances before displaying the updated ones
-  bookHolder.forEach((book, index) => {
-    const bookInstance = document.createElement('article');
-    const dispTitle = document.createElement('h2');
-    dispTitle.textContent = book.title;
-    const dispAuthor = document.createElement('p');
-    dispAuthor.textContent = book.author;
-    const delButton = document.createElement('button');
-    delButton.textContent = 'remove';
-    delButton.setAttribute('data-index', index);
-    delButton.addEventListener('click', deleteBook);
-    const hrline = document.createElement('hr');
-    bookInstance.append(dispTitle, dispAuthor, delButton, hrline);
-    bookDisplay.append(bookInstance);
-  });
-}
-// Removing a book from the bookHolder array and updating localStorage and the UI
-function deleteBook(event) {
-  const index = event.target.getAttribute('data-index');
-  bookHolder.splice(index, 1);
-  localStorage.setItem('storedBooks', JSON.stringify(bookHolder));
-  display();
-}
-// Creating an error message and displaying it when the user submits an empty form
-const error = document.createElement('span');
-error.textContent = 'Please fill out all fields.';
-addButton.addEventListener('click', () => {
-  if (inputTitle.value === '' || inputAuthor.value === '') {
-    bookDisplay.append(error);
-  } else {
-    addBook();
-  }
-});
