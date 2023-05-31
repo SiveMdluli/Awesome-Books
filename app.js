@@ -1,12 +1,26 @@
+class DOMElements {
+  constructor() {
+    this.container = document.querySelector('.container');
+    this.header = document.querySelector('.Pagetitle');
+    this.form = document.querySelector('.form');
+    this.bookDisplay = document.querySelector('.bookDisplay');
+    this.inputTitle = document.querySelector('.title');
+    this.inputAuthor = document.querySelector('.author');
+    this.addButton = document.querySelector('.add');
+    this.error = document.createElement('span');
+    this.error.textContent = 'Please fill out all fields.';
+  }
+
+  // Method to add an error message to the bookDisplay
+  displayError() {
+    this.bookDisplay.append(this.error);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  // Selecting the necessary elements from the HTML file
-  const container = document.querySelector('.container');
-  const header = document.querySelector('.Pagetitle');
-  const form = document.querySelector('.form');
-  const bookDisplay = document.querySelector('.bookDisplay');
-  const inputTitle = document.querySelector('.title');
-  const inputAuthor = document.querySelector('.author');
-  const addButton = document.querySelector('.add');
+  const domElements = new DOMElements();
+
+  // Rest of your code here...
 
   // My Books constructor, for the user input
   class Book {
@@ -18,20 +32,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let bookHolder = [];
 
-  // Retrieving stored books from localStorage and displaying them
-  if (localStorage.getItem('storedBooks')) {
-    bookHolder = JSON.parse(localStorage.getItem('storedBooks'));
-    display();
+  class LocalStorageHandler {
+    constructor() {
+      this.bookHolderKey = 'storedBooks';
+      this.inputDataKey = 'inputdata';
+    }
+  
+    // Method to retrieve the book holder array from local storage
+    getBookHolder() {
+      return JSON.parse(localStorage.getItem(this.bookHolderKey)) || [];
+    }
+  
+    // Method to save the book holder array to local storage
+    saveBookHolder(bookHolder) {
+      localStorage.setItem(this.bookHolderKey, JSON.stringify(bookHolder));
+    }
+  
+    // Method to retrieve the input data object from local storage
+    getInputData() {
+      return JSON.parse(localStorage.getItem(this.inputDataKey)) || {};
+    }
+  
+    // Method to save the input data object to local storage
+    saveInputData(inputData) {
+      localStorage.setItem(this.inputDataKey, JSON.stringify(inputData));
+    }
   }
-
-  // Retrieving stored input data from localStorage and setting it to the input fields
-  const inputStorage = JSON.parse(localStorage.getItem('inputdata')) || {};
-  inputTitle.value = inputStorage.inputTitle || '';
-  inputAuthor.value = inputStorage.inputAuthor || '';
-
-  // Saving input data to localStorage whenever the input fields change
-  inputTitle.addEventListener('input', inputSave);
-  inputAuthor.addEventListener('input', inputSave);
 
   function inputSave() {
     inputStorage.inputTitle = inputTitle.value;
