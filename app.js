@@ -8,6 +8,7 @@ class DOMElements {
     this.inputAuthor = document.querySelector('.author');
     this.addButton = document.querySelector('.add');
     this.error = document.createElement('span');
+    this.error.className = 'error';
     this.error.textContent = 'Please fill out all fields.';
   }
 
@@ -52,90 +53,88 @@ class Book {
   }
 }
 
-class BookApp {
-  constructor() {
-    this.domElements = new DOMElements();
-    this.localStorageHandler = new LocalStorageHandler();
-    this.bookHolder = this.localStorageHandler.getBookHolder();
-    this.inputData = this.localStorageHandler.getInputData();
-    this.addBook = this.addBook.bind(this);
-    this.deleteBook = this.deleteBook.bind(this);
-  }
+const domElements = new DOMElements();
+const localStorageHandler = new LocalStorageHandler();
 
-  addBookToHolder(newBook) {
-    this.bookHolder.push(newBook);
-    this.localStorageHandler.saveBookHolder(this.bookHolder);
+function addBookToHolder(newBook) {
+  const bookHolder = localStorageHandler.getBookHolder();
+  // Check if the book already exists in local storage
+  if (bookHolder.some((book) => book.title === newBook.title)) {
+    // Book already exists, do nothing
+    return;
   }
-
-  clearInputData() {
-    this.inputData = { inputTitle: '', inputAuthor: '' };
-    this.localStorageHandler.saveInputData(this.inputData);
-  }
-
-  addBook() {
-    const titleData = this.domElements.inputTitle.value;
-    const authorData = this.domElements.inputAuthor.value;
-    if (titleData === '' || authorData === '') {
-      this.domElements.displayError();
-      return;
-    }
-    const newBook = new Book(titleData, authorData);
-    this.addBookToHolder(newBook);
-    this.clearInputData();
-    this.displayBooks();
-  }
-
-  deleteBook(event) {
-    const index = event.target.getAttribute('data-index');
-    this.localStorageHandler.deleteBook(index);
-    this.displayBooks();
-  }
-
-  displayBooks() {
-    this.domElements.bookDisplay.innerHTML = '';
-    this.bookHolder.forEach((book, index) => {
-      const bookInstance = document.createElement('article');
-      const dispTitle = document.createElement('h2');
-      dispTitle.textContent = book.title;
-      const dispAuthor = document.createElement('p');
-      dispAuthor.textContent = book.author;
-      const delButton = document.createElement('button');
-      delButton.textContent = 'remove';
-      delButton.setAttribute('data-index', index);
-      delButton.addEventListener('click', this.deleteBook);
-      const hrline = document.createElement('hr');
-      bookInstance.append(dispTitle, dispAuthor, delButton, hrline);
-      this.domElements.bookDisplay.append(bookInstance);
-    });
-  }
-
-  saveInputData() {
-    this.inputData.inputTitle = this.domElements.inputTitle.value;
-    this.inputData.inputAuthor = this.domElements.inputAuthor.value;
-    this.localStorageHandler.saveInputData(this.inputData);
-  }
-
-  setInputData() {
-    this.domElements.inputTitle.value = this.inputData.inputTitle;
-    this.domElements.inputAuthor.value = this.inputData.inputAuthor;
-  }
-
-  init() {
-    this.setInputData();
-    this.displayBooks();
-    this.domElements.inputTitle.addEventListener(
-      'input',
-      this.saveInputData.bind(this)
-    );
-    this.domElements.inputAuthor.addEventListener(
-      'input',
-      this.saveInputData.bind(this)
-    );
-    this.domElements.addButton.addEventListener('click', this.addBook);
-  }
+  bookHolder.push(newBook);
+  localStorageHandler.saveBookHolder(bookHolder);
+  displayBooks();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const bookApp = new BookApp();
-  bookApp.init();
-});
+function clearInputData() {
+  const inputData = { inputTitle: '', inputAuthor: '' };
+  localStorageHandler.saveInputData(inputData);
+}
+
+function addBook() {
+  const titleData = domElements.inputTitle.value;
+  const authorData = domElements.inputAuthor.value;
+  if (titleData === '' || authorData === '') {
+    domElements.displayError();
+    return;
+  }
+  const newBook = new Book(titleData, authorData);
+  addBookToHolder(newBook);
+  clearInputData();
+  displayBooks();
+  domElements.inputTitle.value = '';
+  domElements.inputAuthor.value = '';
+}
+
+function displayBooks() {
+  domElements.bookDisplay.innerHTML = '';
+  const bookHolder = localStorageHandler.getBookHolder();
+  bookHolder.forEach((book, index) => {
+    const bookInstance = document.createElement('article');
+    const dispTitle = `"${book.title}" by ${book.author}`; // Concatenate book title and author
+    const delButton = document.createElement('button');
+    delButton.textContent = 'Remove';
+    delButton.setAttribute('data-index', index);
+    delButton.addEventListener('click', () => {
+      localStorageHandler.deleteBook(index);
+      displayBooks();
+    });
+
+    bookInstance.append(document.createTextNode(dispTitle), delButton);
+
+    domElements.bookDisplay.append(bookInstance);
+
+    // add class to each bookInstance element based on its index
+    if (index % 2 === 0) {
+      bookInstance.classList.add('book-row-even');
+    } else {
+      bookInstance.classList.add('book-row-odd');
+    }
+  });
+}
+
+function saveInputData() {
+  const inputData = {
+    inputTitle: domElements.inputTitle.value,
+    inputAuthor: domElements.inputAuthor.value,
+  };
+  localStorageHandler.saveInputData(inputData);
+}
+
+function setInputData() {
+  const inputData = localStorageHandler.getInputData();
+  domElements.inputTitle.value = inputData.inputTitle;
+  domElements.inputAuthor.value = inputData.inputAuthor;
+}
+
+function init() {
+  setInputData();
+  displayBooks();
+  domElements.inputTitle.addEventListener('input', saveInputData);
+  domElements.inputAuthor.addEventListener('input', saveInputData);
+  domElements.addButton.addEventListener('click', addBook);
+}
+
+document.addEventListener('DOMContentLoaded', init);
