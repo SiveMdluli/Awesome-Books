@@ -10,22 +10,43 @@
 </head>
 
 <body>
-  <header>
-    <nav class="navbar">
-      <a href="#">
-        <h6>Awesome Books</h6>
-      </a>
-      <ul class="header-un-elements">
-        <li>list </li>
-        <li> Add new</li>
-        <li>Contact</li>
+
+  <main class="container">
+    <nav>
+      <div class="Pagetitle">
+        <h2 class="titletext">Awesome Books</h2>
+      </div>
+      <ul>
+        <li><a href="#list" aria-controls="list">List |</a></li>
+        <li><a href="#add" aria-controls="add">Add New |</a></li>
+        <li><a href="#contact" aria-controls="contact">Contact</a></li>
       </ul>
     </nav>
-  </header>
-  <main class="container">
-    <div class="Pagetitle">
-      <h2 class="titletext"> All Awesome Books</h2>
+
+    <div class="time">
+      <p class="date-element">
+        <span class="date"></span>
+      </p>
     </div>
+
+    <section id="add" class="content">
+      <!-- Add Book Section -->
+    </section>
+    <section id="list" class="content active">
+      <!-- List Books Section -->
+    </section>
+    <section id="contact" class="content">
+      <!-- Contact Section -->
+      <h1>Contact Information</h1>
+      <p>Do you have any questions, or you just want to say "Hello"? <br>You can reach out to us!</p>
+      <ul>
+        <li>Our e-mail: mail@mail.com</li>
+        <li>Our phone number: 0043586544422</li>
+        <li>Our adress: Streetname 22, 84503 City, Country</li>
+      </ul>
+
+    </section>
+
     <div class="bookDisplay">
       <!-- book instances will be added here dynamically -->
     </div>
@@ -36,7 +57,10 @@
       <button class="add">Add</button>
     </div>
   </main>
-  <script src="index.js"></script>
+
+  <footer class="footer">
+    <p>Copyright © 2023 Awesome Books</p>
+  </footer>
 
   <script src="app.js"></script>
 </body>
