@@ -4,8 +4,10 @@
 
 body {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  font-family: 'Brush Script MT', cursive;
+  align-items: center;
+  font-family: "Brush Script MT", cursive;
   font-weight: bold;
 }
 
@@ -70,4 +72,85 @@ button:hover {
 
 .error {
   color: red;
+}
+
+nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 900;
+  border: 2px solid #000;
+  width: 100%;
+}
+
+/* nav .Pagetitle {
+} */
+
+nav ul {
+  display: flex;
+  justify-content: flex-end;
+  text-decoration: none;
+  list-style: none;
+}
+
+#contact h1 {
+  font-size: 34px;
+}
+
+.content {
+  display: none;
+}
+
+.content.active {
+  display: block;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: black;
+}
+
+nav ul li a.active {
+  color: blue;
+}
+
+#add {
+  display: none;
+}
+
+#add.active {
+  display: block;
+}
+
+#list.active {
+  display: block;
+}
+
+#contact.active {
+  display: block;
+}
+
+.time {
+  margin-right: 0;
+  width: 100%;
+}
+
+.time p {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.date {
+  color: black;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: baseline;
+  border: 2px solid #000;
+  align-items: center;
+  width: 50%;
+  margin-top: 1.5rem;
 }

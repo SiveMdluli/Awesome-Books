@@ -13,7 +13,7 @@ class DOMElements {
   }
 
   displayError() {
-    this.bookDisplay.append(this.error);
+    this.form.insertAdjacentElement('beforebegin', this.error);
   }
 }
 
@@ -129,12 +129,59 @@ function setInputData() {
   domElements.inputAuthor.value = inputData.inputAuthor;
 }
 
+// Navigation function
+const sections = document.querySelectorAll('.content');
+
+function navigateToSection(sectionId) {
+  const sections = document.querySelectorAll('.content');
+  const section = document.querySelector(`#${sectionId}`);
+  sections.forEach((s) => {
+    if (s !== section) {
+      s.classList.remove('active');
+      s.style.display = 'none'; // hide non-active sections
+    }
+  });
+  section.classList.add('active');
+  section.style.display = 'block'; // show active section
+
+  // Handle special cases for Add and List sections
+  if (sectionId === 'add') {
+    domElements.header.textContent = 'Awesome Books';
+    domElements.form.style.display = 'block';
+    domElements.bookDisplay.style.display = 'none';
+  } else if (sectionId === 'list') {
+    domElements.header.textContent = 'Awesome Books';
+    domElements.form.style.display = 'none';
+    domElements.bookDisplay.style.display = 'block';
+  } else {
+    // Reset header and hide form and book display for other sections
+    domElements.header.textContent = ' Awesome Books';
+    domElements.form.style.display = 'none';
+    domElements.bookDisplay.style.display = 'none';
+  }
+}
+
+// Event listners for the nav links
+const links = document.querySelectorAll('nav a');
+links.forEach((link) => {
+  link.addEventListener('click', (event) => {
+    event.preventDefault();
+    const sectionId = link.getAttribute('href');
+    navigateToSection(sectionId.substr(1));
+  });
+});
+
 function init() {
+  updateTime();
   setInputData();
+  navigateToSection('add');
   displayBooks();
   domElements.inputTitle.addEventListener('input', saveInputData);
   domElements.inputAuthor.addEventListener('input', saveInputData);
   domElements.addButton.addEventListener('click', addBook);
+
+  addBookToHolder(new Book('Book 1', 'Author 1'));
+  addBookToHolder(new Book('Book 2', 'Author 2'));
 }
 
 document.addEventListener('DOMContentLoaded', init);
