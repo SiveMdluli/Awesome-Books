@@ -3,8 +3,8 @@
 }
 
 body {
-  display: flex;
-  justify-content: center;
+  /* display: flex;
+  justify-content: center; */
   font-family: 'Brush Script MT', cursive;
   font-weight: bold;
 }
@@ -70,4 +70,26 @@ button:hover {
 
 .error {
   color: red;
+}
+header {
+  width: 100%;
+}
+main {
+  width: 100%;
+}
+.navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.header-un-elements {
+  display: flex;
+  gap: 20;
+}
+
+.header-un-elements li {
+  padding: 1rem;
+  text-decoration: none;
+  list-style: none;
 }
