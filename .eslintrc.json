@@ -17,6 +17,7 @@
     "no-unused-vars": "off",
     "eol-last": "off",
     "no-undef": "off",
+    "max-classes-per-file": "off",
     "import/extensions": [
       1,
       {
