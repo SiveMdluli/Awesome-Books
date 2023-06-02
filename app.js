@@ -61,7 +61,6 @@ class Book {
 
 const domElements = new DOMElements();
 const localStorageHandler = new LocalStorageHandler();
-
 function addBookToHolder(newBook) {
   const bookHolder = localStorageHandler.getBookHolder();
   // Check if the book already exists in local storage
@@ -69,6 +68,7 @@ function addBookToHolder(newBook) {
     // Book already exists, do nothing
     return;
   }
+
   bookHolder.push(newBook);
   localStorageHandler.saveBookHolder(bookHolder);
   displayBooks();
@@ -86,6 +86,7 @@ function addBook() {
     domElements.displayError();
     return;
   }
+
   const newBook = new Book(titleData, authorData);
   addBookToHolder(newBook);
   clearInputData();
@@ -108,11 +109,8 @@ function displayBooks() {
       localStorageHandler.deleteBook(index);
       displayBooks();
     });
-
     bookInstance.append(document.createTextNode(dispTitle), delButton);
-
     domElements.bookDisplay.append(bookInstance);
-
     // add class to each bookInstance element based on its index
     if (index % 2 === 0) {
       bookInstance.classList.add("book-row-even");
@@ -129,7 +127,6 @@ function saveInputData() {
   };
   localStorageHandler.saveInputData(inputData);
 }
-
 function setInputData() {
   const inputData = localStorageHandler.getInputData();
   domElements.inputTitle.value = inputData.inputTitle;
@@ -148,6 +145,7 @@ function navigateToSection(sectionId) {
       s.style.display = "none"; // hide non-active sections
     }
   });
+
   section.classList.add("active");
   section.style.display = "block"; // show active section
 
@@ -168,9 +166,18 @@ function navigateToSection(sectionId) {
   }
 }
 
+// Event listners for the nav links
+const links = document.querySelectorAll("nav a");
+links.forEach((link) => {
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    const sectionId = link.getAttribute("href");
+    navigateToSection(sectionId.substr(1));
+  });
+});
+
 // DATE AND TIME
 const timeElement = document.querySelector(".date");
-
 function updateTime() {
   const date = new Date();
   const options = {
@@ -187,16 +194,6 @@ function updateTime() {
   timeElement.innerHTML = time;
   setTimeout(updateTime, 1000);
 }
-
-// Event listners for the nav links
-const links = document.querySelectorAll("nav a");
-links.forEach((link) => {
-  link.addEventListener("click", (event) => {
-    event.preventDefault();
-    const sectionId = link.getAttribute("href");
-    navigateToSection(sectionId.substr(1));
-  });
-});
 
 function init() {
   updateTime();
